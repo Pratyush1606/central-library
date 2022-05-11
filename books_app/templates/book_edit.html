@@ -1,0 +1,104 @@
+{% load rest_framework %}
+
+<html lang="en">
+    <head>
+        <title>Add Book</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            function csrfcookie(name){
+                var cookieValue = null;
+
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function BookEdit(id) {
+                var name = document.getElementById("name").value;
+                var published = document.getElementById("published").value;
+                var author = document.getElementById("author").value;
+                var domain = document.getElementById("domain").value;
+                var is_available = document.getElementById("is_available").value;
+
+                var data = {};
+                data["name"] = name;
+                data["published"] = published;
+                data["author"] = author;
+                data["domain"] = domain;
+                data["is_available"] = is_available;
+
+                console.log(data);
+
+                var csrftoken = csrfcookie('csrftoken');
+                var url = `/update/${id}`;
+                fetch(url,{
+                    method: 'PUT',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify(data),
+                }).then(function(response){
+                    location.href="/book_list";
+                })
+            }
+        </script>
+    </head>
+    
+    <body>
+        <h1 class="text-center">Edit Book</h1>
+        <div class="container" style="width:50%; background-color: rgba(127, 143, 185, 0.842);">
+            <form name="edit_form" onsubmit="return BookEdit({{book.book_id}})" enctype="multipart/form-data">
+                {% csrf_token %}
+          
+                <div class="form-group">
+                  <label for="name">Book Name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Harry Potter" value="{{book.name}}" readonly>
+                </div>
+          
+                <div class="form-group">
+                  <label for="published">Published</label>
+                  <input type="number" class="form-control" id="published" name="published" placeholder="2022" value="{{book.published}}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="J. K. Rowling" value="{{book.author}}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="domain">Domain</label>
+                    <input type="text" class="form-control" id="domain" name="domain" placeholder="Fiction" value="{{book.domain}}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="is_available">Is Availabale</label>
+                    <input type="checkbox" class="form-control" id="is_available" name="is_available" placeholder="Harry Potter" value="{{book.is_available}}" >
+                </div>
+          
+                <div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="text-center">
+            <a class="btn btn-primary" href="{% url 'books_app:book_list' %}">See all Books :)</a>
+        </div>
+
+    </body>
+</html>

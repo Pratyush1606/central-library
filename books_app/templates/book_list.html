@@ -117,6 +117,10 @@
                             <p class="card-text">Domain: {{book.domain}}</p>
                             <p class="card-text">isAvailable: {{book.is_available}}</p>
 
+                            <a href="{% url 'books_app:book_update' book.book_id %}">
+                                <input class="btn btn-primary" id="editBtn" type="button" value="Edit">
+                            </a>
+
                             <input class="btn btn-danger" id="delBtn" onclick="deleteBook({{book.book_id}})" type="button" value="Delete">
                         </div>
                     </div>

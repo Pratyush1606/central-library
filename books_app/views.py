@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -59,6 +60,31 @@ class BookUpdate(APIView):
         
         serializer = BookSerializer(book)
         return Response(data={"book": serializer.data}, template_name="book_edit.html", status=status.HTTP_200_OK)
+    
+    def put(self, request, id):
+        try:
+            book = Book.objects.get(book_id=id)
+        except Book.DoesNotExist:
+            return Response(template_name="book_list.html", status=status.HTTP_404_NOT_FOUND)
+
+        data = {
+            "name": request.data.get("name"),
+            "published": request.data.get("published"),
+            "author": request.data.get("author"),
+            "domain": request.data.get("domain"),
+            "is_available": request.data.get("is_available", False),
+        }
+
+        serializer = BookSerializer(book, data, partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return JsonResponse(data={"success": True})
+        
+        error = {
+            "error": "Invalid data"
+        }
+        return Response(data=error, template_name="book_list.html", status=status.HTTP_400_BAD_REQUEST)
+
     
     def delete(self, request, id):
         try:
