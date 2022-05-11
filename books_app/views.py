@@ -43,15 +43,19 @@ class BookList(APIView):
         query_published = request.query_params.get("published")
         query_domain = request.query_params.get("domain")
 
+        queried = False
         if(query_author):
+            queried = True
             books = Book.objects.filter(author=query_author)
         else:
             books = Book.objects.all()
         
         if(query_published):
+            queried = True
             books = books.filter(published=query_published)
         
         if(query_domain):
+            queried = True
             books = books.filter(domain=query_domain)
 
         serializers = BookSerializer(books, many=True)
@@ -61,7 +65,8 @@ class BookList(APIView):
                 "author": query_author if query_author else "",
                 "published": query_published if query_published else "",
                 "domain": query_domain if query_domain else ""
-            }
+            },
+            "queried": queried
         }
         return Response(data=data, template_name="book_list.html", status=status.HTTP_200_OK)
 

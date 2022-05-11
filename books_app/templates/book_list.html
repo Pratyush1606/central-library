@@ -68,12 +68,12 @@
                 </div>
             </form>
         </div>
-        
-        {% if query %}
-            <div class="text-center">
-                <a class="btn btn-primary" href="{% url 'books_app:book_list' %}">See all Books :)</a>
-            </div>
-            <br>
+        <br>
+        <div class="text-center">
+            <a class="btn btn-primary" href="{% url 'books_app:book_list' %}">See all Books :)</a>
+        </div>
+
+        {% if queried == True %}
             <h2 class="text-center">Search Results for query={{query}}</h2>            
         {% endif %}
 
@@ -103,7 +103,9 @@
             </div>
             </div>
         {% else %}
-            <h2 class="text-center">There are no search results for query={{query}}.</h2>
+            {% if queried == True %}
+                <h2 class="text-center">There are no search results for query={{query}}.</h2>
+            {% endif %}
         {% endif %}
 
         <script>
