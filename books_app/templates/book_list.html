@@ -96,6 +96,31 @@
         </div>
 
         <br>
+
+        <div class="container" style="width:50%; background-color: rgba(127, 143, 185, 0.842);">
+            <form name="edit_form" action="{% url 'books_app:book_list' %}" method="GET" enctype="multipart/form-data">
+                {% csrf_token %}
+          
+                <div class="form-group">
+                  <label for="author">Author</label>
+                  <input type="text" class="form-control" id="author" name="author" placeholder="J. K. Rowling" value="{{query.author}}">
+                </div>
+          
+                <div class="form-group">
+                  <label for="published">Published</label>
+                  <input type="number" class="form-control" id="published" name="published" placeholder="2022" value="{{query.published}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="domain">Domain</label>
+                    <input type="text" class="form-control" id="domain" name="domain" placeholder="fiction" value="{{query.domain}}">
+                  </div>
+
+                <div>
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                </div>
+            </form>
+        </div>
         
         {% if query %}
             <div class="text-center">
@@ -105,7 +130,8 @@
             <h2 class="text-center">Search Results for query={{query}}</h2>            
         {% endif %}
 
-        <div class="text-center">
+        {% if results %}
+            <div class="text-center">
             <div class="row row-cols-1 row-cols-md-3 g-4 m-5 pb-5">
                 {% for book in results %}
                 <div class="col">
@@ -128,6 +154,10 @@
                 </div>
                 {% endfor %}
             </div>
-        </div>
+            </div>
+        {% else %}
+            <h2 class="text-center">There are no search results for query={{query}}.</h2>
+        {% endif %}
+
     </body>
 </html>

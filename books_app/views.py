@@ -41,10 +41,29 @@ class BookList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request):
-        books = Book.objects.all()
+        query_author = request.query_params.get("author")
+        query_published = request.query_params.get("published")
+        query_domain = request.query_params.get("domain")
+
+        if(query_author):
+            books = Book.objects.filter(author=query_author)
+        else:
+            books = Book.objects.all()
+        
+        if(query_published):
+            books = books.filter(published=query_published)
+        
+        if(query_domain):
+            books = books.filter(domain=query_domain)
+
         serializers = BookSerializer(books, many=True)
         data = {
-            "results": serializers.data
+            "results": serializers.data,
+            "query": {
+                "author": query_author if query_author else "",
+                "published": query_published if query_published else "",
+                "domain": query_domain if query_domain else ""
+            }
         }
         return Response(data=data, template_name="book_list.html", status=status.HTTP_200_OK)
 
