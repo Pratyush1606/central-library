@@ -47,3 +47,25 @@ class BookList(APIView):
         }
         return Response(data=data, template_name="book_list.html", status=status.HTTP_200_OK)
 
+class BookUpdate(APIView):
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, id):
+        try:
+            book = Book.objects.get(book_id=id)
+        except Book.DoesNotExist:
+            return Response(template_name="book_list.html", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = BookSerializer(book)
+        return Response(data={"book": serializer.data}, template_name="book_edit.html", status=status.HTTP_200_OK)
+    
+    def delete(self, request, id):
+        try:
+            book = Book.objects.get(book_id=id)
+        except Book.DoesNotExist:
+            return Response(template_name="book_list.html", status=status.HTTP_404_NOT_FOUND)
+        
+        book.delete()
+        return Response(template_name="book_list.html", status=status.HTTP_200_OK)
+        

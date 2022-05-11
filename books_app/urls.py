@@ -20,5 +20,6 @@ app_name = "books_app"
 urlpatterns = [
     path("", views.AddBook.as_view(), name="book_add"),
     path("book_list", views.BookList.as_view(), name="book_list"),
+    path("update/<int:id>", views.BookUpdate.as_view(), name="book_update"),
     
 ]

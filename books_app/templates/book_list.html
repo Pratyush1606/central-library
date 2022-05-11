@@ -28,6 +28,39 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
             }
+
+            function csrfcookie(name){
+                var cookieValue = null;
+
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var delbutton = document.getElementById("delBtn");
+            function deleteBook(id) {
+                var csrftoken = csrfcookie('csrftoken');
+                var url = `/update/${id}`;
+                fetch(url,{
+                    method: 'DELETE',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    }
+                }).then(function(response){
+                    location.href="/book_list";
+                });
+            }
+            
         </script>
     </head>
     <style>
@@ -83,6 +116,8 @@
                             <p class="card-text">Author: {{book.author}}</p>
                             <p class="card-text">Domain: {{book.domain}}</p>
                             <p class="card-text">isAvailable: {{book.is_available}}</p>
+
+                            <input class="btn btn-danger" id="delBtn" onclick="deleteBook({{book.book_id}})" type="button" value="Delete">
                         </div>
                     </div>
                     <br>
