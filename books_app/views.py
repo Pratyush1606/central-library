@@ -16,7 +16,6 @@ class AddBook(APIView):
         return Response(template_name="book_add.html", status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request.data)
         data = {
             "name": request.data.get("name"),
             "published": request.data.get("published"),
@@ -27,7 +26,6 @@ class AddBook(APIView):
 
         serializer = BookSerializer(data=data)
         if(serializer.is_valid()):
-            print(11)
             serializer.save()
             return redirect("books_app:book_list")
         
@@ -80,7 +78,7 @@ class BookUpdate(APIView):
         serializer = BookSerializer(book)
         return Response(data={"book": serializer.data}, template_name="book_edit.html", status=status.HTTP_200_OK)
     
-    def put(self, request, id):
+    def post(self, request, id):
         try:
             book = Book.objects.get(book_id=id)
         except Book.DoesNotExist:
@@ -97,13 +95,8 @@ class BookUpdate(APIView):
         serializer = BookSerializer(book, data, partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return JsonResponse(data={"success": True})
         
-        error = {
-            "error": "Invalid data"
-        }
-        return Response(data=error, template_name="book_list.html", status=status.HTTP_400_BAD_REQUEST)
-
+        return redirect("books_app:book_list")
     
     def delete(self, request, id):
         try:
