@@ -1,0 +1,56 @@
+{% load rest_framework %}
+
+<html lang="en">
+    <head>
+        <title>Add Book</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    
+    <body>
+        <h1 class="text-center">Add Book</h1>
+        <div class="container" style="width:50%; background-color: rgba(127, 143, 185, 0.842);">
+            <form action="{% url 'books_app:book_add' %}" method="POST" enctype="multipart/form-data" id="bookAddForm">
+                {% csrf_token %}
+          
+                <div class="form-group">
+                  <label for="name">Book Name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Harry Potter" required>
+                </div>
+          
+                <div class="form-group">
+                  <label for="published">Published</label>
+                  <input type="number" class="form-control" id="published" name="published" value="" placeholder="2022" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="J. K. Rowling" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="domain">Domain</label>
+                    <input type="text" class="form-control" id="domain" name="domain" placeholder="Fiction" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="is_available">Is Availabale</label>
+                    <input type="checkbox" class="form-control" id="is_available" name="is_available" placeholder="Harry Potter">
+                </div>
+          
+                <div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="text-center">
+            <a class="btn btn-primary" href="{% url 'books_app:book_list' %}">See all Books :)</a>
+        </div>
+
+    </body>
+</html>

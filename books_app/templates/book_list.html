@@ -1,0 +1,94 @@
+{% load rest_framework %}
+
+<html lang="en">
+    <head>
+        <title>Books List</title>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="sviewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            var mybutton = document.getElementById("myBtn");
+
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function() {scrollFunction()};
+
+            function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+            }
+
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            }
+        </script>
+    </head>
+    <style>
+        #myBtn {
+            display: block;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 4px;
+            }
+
+        #myBtn:hover {
+            background-color: #555;
+        }
+        /* .card-custom {
+            max-width: 128px;
+        } */
+    </style>
+    <body>
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        
+        <h1 class="text-center">Books List</h1>
+        <div class="text-center">
+            <a class="btn btn-primary" href="{% url 'books_app:book_add' %}">Want to add a new Book :)</a>
+        </div>
+
+        <br>
+        
+        {% if query %}
+            <div class="text-center">
+                <a class="btn btn-primary" href="{% url 'books_app:book_list' %}">See all Books :)</a>
+            </div>
+            <br>
+            <h2 class="text-center">Search Results for query={{query}}</h2>            
+        {% endif %}
+
+        <div class="text-center">
+            <div class="row row-cols-1 row-cols-md-3 g-4 m-5 pb-5">
+                {% for book in results %}
+                <div class="col">
+                    <div class="card" style="max-width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{book.name}}</h5>
+                            <p class="card-text">Published: {{book.published}}</p>
+                            <p class="card-text">Author: {{book.author}}</p>
+                            <p class="card-text">Domain: {{book.domain}}</p>
+                            <p class="card-text">isAvailable: {{book.is_available}}</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>
